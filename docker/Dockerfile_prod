@@ -10,7 +10,6 @@ COPY migrations migrations
 COPY requirements requirements
 COPY requirements.txt microblog.py boot.sh ./
 
-# Combine setup steps into one RUN
 RUN python -m venv .venv && \
     .venv/bin/pip3 install --no-cache-dir -r requirements.txt && \
     chmod +x boot.sh && \

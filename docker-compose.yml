@@ -1,0 +1,30 @@
+services:
+  db:
+    image: mysql/mysql-server:5.7
+    container_name: microblog-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "root1234"       # required for first-time init
+      MYSQL_DATABASE: microblog
+      MYSQL_USER: microblog
+      MYSQL_PASSWORD: "456456"
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -u microblog -p456456 -h localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  prod:
+    image: linusjonathansandin/microblog:1.0.0-prod
+    container_name: microblog-prod
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "mysql+pymysql://microblog:456456@db:3306/microblog"
+      FLASK_ENV: "production"
+    ports:
+      - "8000:5000"

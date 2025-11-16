@@ -17,7 +17,7 @@ services:
       retries: 10
 
   prod:
-    image: linusjonathansandin/microblog:1.0.0-prod
+    image: linusjonathansandin/microblog:1.0.1-prod
     container_name: microblog-prod
     restart: always
     depends_on:

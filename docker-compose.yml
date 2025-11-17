@@ -28,3 +28,19 @@ services:
       FLASK_ENV: "production"
     ports:
       - "8000:5000"
+
+  test:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile_test
+    container_name: microblog-test
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "mysql+pymysql://microblog:456456@db:3306/microblog"
+      FLASK_ENV: "testing"
+    volumes:
+      - ./app:/app/app
+      - ./tests:/app/tests
+    command: /test-entrypoint.sh

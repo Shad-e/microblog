@@ -2,6 +2,8 @@
 Fixtures for tests
 """
 # pylint: disable=redefined-outer-name
+import os
+os.environ['SQLALCHEMY_SILENCE_UBER_WARNING'] = '1' # FIX ?? 
 import pytest
 from app import create_app, db
 from app.config import TestConfig

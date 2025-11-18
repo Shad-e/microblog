@@ -3,7 +3,6 @@ Contains tests for app.models.User class
 """
 # pylint: disable=redefined-outer-name
 from datetime import datetime, timedelta
-from unittest import mock
 import pytest
 from app.models import User, Post
 from app import db
@@ -29,7 +28,7 @@ def test_new_user(user1):
     assert user1.about_me == 'Hello'
     assert str(user1) == "<User john, john@example.com>"
 
-def test_password_hashing(test_app, user1):
+def test_password_hashing(test_app, user1): # pylint: disable=unused-argument
     """
     Test setting password for user
     """
@@ -37,7 +36,7 @@ def test_password_hashing(test_app, user1):
     assert user1.check_password('dog') is False
     assert user1.check_password('cat') is True
 
-def test_avatar(test_app, user1):
+def test_avatar(test_app, user1): # pylint: disable=unused-argument
     """
     Test creation of Gravatar URL
     """

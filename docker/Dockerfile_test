@@ -1,3 +1,5 @@
+#syntax=docker/dockerfile:1.4
+
 FROM python:3.8-slim
 
 WORKDIR /app
@@ -12,8 +14,8 @@ COPY Makefile Makefile
 COPY .pylintrc .pylintrc
 COPY .coveragerc .coveragerc
 COPY pytest.ini pytest.ini
-
 COPY scripts/test-entrypoint.sh /test-entrypoint.sh
+
 RUN chmod +x /test-entrypoint.sh
 
 ENTRYPOINT ["/test-entrypoint.sh"]

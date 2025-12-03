@@ -21,4 +21,5 @@ server_user_groups:
     -   sudo
 
 ssh_keys:
-    -  "files/ssh/jofb21.pub"
+    -  "files/ssh/azure-microblog.pub"
+    -  "files/ssh/azure.pub"

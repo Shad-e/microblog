@@ -1,2 +1,10 @@
 [local]
 localhost ansible_connection=local
+
+[mywebapp]
+appserver1.jofb21.me
+appserver2.jofb21.me
+
+[myloadbalancer]
+www.jofb21.me
+jofb21.me

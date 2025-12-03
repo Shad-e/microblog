@@ -85,3 +85,9 @@
         force: yes
         remove: yes
     # ignore_errors: yes
+
+-   name: Install SSH keys for group members
+    authorized_key:
+        user: "{{ server_user }}"
+        key: "{{ lookup('file', item) }}"
+        loop: "{{ ssh_keys }}"

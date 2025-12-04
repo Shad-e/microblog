@@ -20,6 +20,8 @@ server_user_pass: "1233211234567baktusbaktus" # change me
 server_user_groups:
     -   sudo
 
-ssh_keys:
-    -  "files/ssh/azure-microblog.pub"
-    -  "files/ssh/azure.pub"
+users_users:
+    - user: deploy
+      github: Shad-e
+    - user: deploy
+      github: jonathanfriberg

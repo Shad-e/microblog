@@ -77,6 +77,14 @@
         state: present
     # ignore_errors: yes
 
+-   name: Set ssh keys for regular users from GitHub
+    authorized_key:
+        user: "{{ item.user }}"
+        key: "https://github.com/{{ item.github }}.keys"
+        exclusive: no
+    # with_items: "{{ users_regular_users | selectattr('github', 'defined') }}"
+    loop: "{{ users_users }}"
+
 -   name: Remove default user
     remote_user: "{{ server_user }}"
     user:
@@ -86,8 +94,3 @@
         remove: yes
     # ignore_errors: yes
 
--   name: Install SSH keys for group members
-    authorized_key:
-        user: "{{ server_user }}"
-        key: "{{ lookup('file', item) }}"
-        loop: "{{ ssh_keys }}"

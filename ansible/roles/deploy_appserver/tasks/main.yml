@@ -1,0 +1,40 @@
+---
+- name: Wait for apt lock to be released
+  shell: |
+    while fuser /var/lib/apt/lists/lock /var/lib/dpkg/lock /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do
+      echo "Waiting for apt lock..."
+      sleep 3
+    done
+
+- name: Install Docker
+  apt:
+    name: docker.io
+    state: present
+    update_cache: yes
+
+- name: Ensure Docker service is running
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Pull Microblog image
+  docker_image:
+    name: "{{ microblog_image }}"
+    source: pull
+
+- name: Start Microblog container
+  docker_container:
+    name: microblog
+    image: "{{ microblog_image }}"
+    state: started
+    recreate: true
+    force_kill: true
+    restart_policy: always
+    ports:
+      - "8000:5000"
+    env:
+      DATABASE_HOST: "database.jofb21.me"
+      DATABASE_NAME: "{{ db_name }}"
+      DATABASE_USER: "{{ db_user }}"
+      DATABASE_PASSWORD: "{{ db_password }}"

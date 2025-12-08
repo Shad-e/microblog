@@ -1,7 +1,7 @@
 ---
-    -   hosts: myloadbalancer
+    -   hosts: database
         remote_user: "deploy"
         become: yes
         become_method: sudo
         roles:
-            -   deploy_lb
+          -   deploy_db

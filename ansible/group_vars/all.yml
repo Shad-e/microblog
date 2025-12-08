@@ -25,3 +25,9 @@ users_users:
       github: Shad-e
     - user: deploy
       github: jonathanfriberg
+
+db_host: database.jofb21.me
+db_name: microblog
+db_user: microblog
+db_password: "456456"
+

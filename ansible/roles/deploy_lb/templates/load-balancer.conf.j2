@@ -1,6 +1,7 @@
 http {
     upstream app-hosts {
-        server {{ groups['appserver'][0] }}:8000;
+        server appserver1.{{ domain_name }}:8000;
+        server appserver2.{{ domain_name }}:8000;
     }
 
     access_log /var/log/nginx/access.log;

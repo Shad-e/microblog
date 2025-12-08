@@ -1,0 +1,6 @@
+db_root_password: "root1234"
+db_user: "microblog"
+db_user_password: "456456"
+db_name: "microblog"
+db_volume_name: "mysql-data"
+db_container_name: "microblog-mysql"

@@ -3,19 +3,31 @@
 ansible_python_interpreter: "python3"
 
 region: northeurope
-resource_group: <your resource group> # Change me
-domain_name: <your domain> # Change me
+resource_group: DIDA-JOFB21-DV1673-H25-LP2 # Change me
+domain_name: jofb21.me
 
-admin_email: <an email>
+admin_email: jofb21@student.bth.se
 
 vmtags:
-    StudentId: <acronym> # Change me
+    StudentId: jofb21 # Change me
 
 
-pub_ssh_key_location: '<path to you local ssh public key>' # Change me, your local ssh key!
+pub_ssh_key_location: /home/dunken/.ssh/azure-microblog.pub # Change me, your local ssh key!
 
 
 server_user: "deploy"
-server_user_pass: "<a password>" # change me
+server_user_pass: "1233211234567baktusbaktus" # change me
 server_user_groups:
     -   sudo
+
+users_users:
+    - user: deploy
+      github: Shad-e
+    - user: deploy
+      github: jonathanfriberg
+
+db_host: database.jofb21.me
+db_name: microblog
+db_user: microblog
+db_password: "456456"
+

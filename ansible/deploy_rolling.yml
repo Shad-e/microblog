@@ -1,0 +1,42 @@
+---
+- name: rolling update microblog
+  hosts: myappserver
+  remote_user: deploy
+  serial: 1
+  become: true
+
+  vars:
+    lb_conf_path: /etc/nginx/conf.d/microblog.conf
+
+  pre_tasks:
+    - name: Remove this server from load balancer
+      include_role:
+        name: deploy_lb
+        apply:
+          delegate_to: "{{ groups['myloadbalancer'][0] }}"
+      vars:
+        disabled_host: "{{ inventory_hostname }}"
+
+
+  tasks:
+    - name: Deploy application
+      include_role:
+        name: deploy_appserver
+
+    - name: Wait for application to be healthy
+      uri:
+        url: http://127.0.0.1:8000/
+        status_code: 200
+      register: result
+      retries: 20
+      delay: 2
+      until: result.status == 200
+
+  post_tasks:
+    - name: Add server back to load balancer
+      include_role:
+        name: deploy_lb
+        apply:
+          delegate_to: "{{ groups['myloadbalancer'][0] }}"
+      vars:
+        disabled_host: ""

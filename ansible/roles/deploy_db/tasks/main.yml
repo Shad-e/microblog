@@ -1,0 +1,30 @@
+---
+- name: Install Docker
+  apt:
+    name: docker.io
+    state: present
+    update_cache: yes
+
+- name: Ensure Docker service is running
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Create MySQL volume
+  docker_volume:
+    name: "{{ db_volume_name }}"
+
+- name: Run MySQL container
+  docker_container:
+    name: microblog-mysql
+    image: mysql/mysql-server:5.7
+    state: started
+    restart_policy: always
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ db_root_password }}"
+      MYSQL_DATABASE: "{{ db_name }}"
+      MYSQL_USER: "{{ db_user }}"
+      MYSQL_PASSWORD: "{{ db_user_password }}"
+    volumes:
+      - "{{ db_volume_name }}:/var/lib/mysql"

@@ -1,2 +1,12 @@
 [local]
 localhost ansible_connection=local
+
+[myappserver]
+appserver1.jofb21.me ansible_host=13.94.113.192
+appserver2.jofb21.me ansible_host=13.94.119.189
+
+[myloadbalancer]
+loadbalancer.jofb21.me ansible_host=52.169.5.129
+
+[database]
+database.jofb21.me ansible_host=13.74.151.28

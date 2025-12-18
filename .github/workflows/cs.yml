@@ -1,0 +1,47 @@
+name: Security Checks
+
+on:
+  pull_request:
+  push:
+    branches: [ "master" ]
+    tags: [ 'v*' ]
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install Bandit
+        run: |
+          python -m pip install --upgrade pip
+          pip install bandit
+      
+      - name: run Bandit
+        run: |
+          bandit -r app/
+
+      - name: build production docker image
+        run: |
+          docker build -f docker/Dockerfile_prod -t microblog:security .
+
+      - name: run trivy image scan
+        run: |
+          docker run --rm \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy image \
+            --scanners vuln,secret,misconfig \
+            --severity HIGH,CRITICAL \
+            --exit-code 1 \
+            --no-progress \
+            microblog:security
+
+      - name: Run Dockle
+        run: |
+          VERSION=$(curl --silent https://api.github.com/repos/goodwithtech/dockle/releases/latest | \
+          grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/') && \
+          docker run --rm \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            goodwithtech/dockle:v${VERSION} microblog:security

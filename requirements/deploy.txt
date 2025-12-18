@@ -1,6 +1,6 @@
 ansible==10.0.1 # python3.11
 ansible-core==2.17.10 # Någon gång installerades fel, därför sätter jag den. Ska inte behövas
-setuptools # distutils är inte en del av standardlibrary längre utan behöver installeras via setuptools
+setuptools>=78.1.1 # distutils är inte en del av standardlibrary längre utan behöver installeras via setuptools
 boto
 boto3
 PyMySQL

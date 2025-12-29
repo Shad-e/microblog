@@ -1,10 +1,10 @@
 name: Security Checks
 
 on:
-  pull_request:
   push:
     branches: [ "master" ]
-    tags: [ 'v*' ]
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   security:
@@ -21,7 +21,7 @@ jobs:
       
       - name: run Bandit
         run: |
-          bandit -r app/
+          bandit -r app/ -ll -i
 
       - name: build production docker image
         run: |
@@ -37,6 +37,10 @@ jobs:
             --exit-code 1 \
             --no-progress \
             microblog:security
+
+      - name : run trivy filesystem scan
+        run: |
+          docker run --rm -v .:/repo -w /repo aquasec/trivy:latest fs --scanners vuln,secret,misconfig --severity HIGH,CRITICAL --exit-code 1 --no-progress --skip-dirs .venv,venv,ansible/venv .
 
       - name: Run Dockle
         run: |

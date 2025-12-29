@@ -1,0 +1,12 @@
+---
+- name: Gather instances
+  import_playbook: gather_instances.yml
+
+- name: Create security groups
+  hosts: local
+  connection: local
+  gather_facts: False
+  collections:
+    - azure.azcollection
+  roles:
+    - security_groups

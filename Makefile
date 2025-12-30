@@ -216,3 +216,28 @@ install-deploy:
 	${pip} install -r requirements/deploy.txt
 	${pip} install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt
 	cd ansible && ansible-galaxy install -r requirements.yml --force
+
+# target: bandit					   - Run bandit security linter on app/ directory
+.PHONY: bandit
+bandit:
+	bandit -r app/
+
+# target: trivy-target
+.PHONY: trivy-target
+trivy-target:
+	docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --scanners vuln,secret,misconfig --no-progress --severity HIGH,CRITICAL --exit-code 1 $(image_name):$(image_tag)
+
+# target: trivy-fs
+.PHONY: trivy-fs
+trivy-fs:
+	docker run --rm -v .:/repo -w /repo aquasec/trivy:latest fs --scanners vuln,secret,misconfig --severity HIGH,CRITICAL --exit-code 1 --no-progress --skip-dirs .venv,venv,ansible/venv .
+
+# target: dockle
+.PHONY: dockle
+dockle:
+	@VERSION=$$(curl --silent https://api.github.com/repos/goodwithtech/dockle/releases/latest | \
+	grep '"tag_name":' | \
+	sed -E 's/.*"v([^"]+)".*/\1/') && \
+	docker run --rm \
+	-v /var/run/docker.sock:/var/run/docker.sock \
+	goodwithtech/dockle:v$$VERSION $(image_name):$(image_tag)

@@ -17,17 +17,20 @@ services:
       retries: 10
 
   prod:
-    image: linusjonathansandin/microblog:1.1.0-prod
+    build:
+      context: .
+      dockerfile: docker/Dockerfile_prod
     container_name: microblog-prod
-    restart: always
+    restart: unless-stopped
     depends_on:
       db:
         condition: service_healthy
     environment:
       DATABASE_URL: "mysql+pymysql://microblog:456456@db:3306/microblog"
       FLASK_ENV: "production"
+      FLASH_APP: "microblog:app"
     ports:
-      - "8000:5000"
+      - "5000:5000"
 
   test:
     build:

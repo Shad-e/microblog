@@ -27,10 +27,13 @@ bootstrap = Bootstrap()
 moment = Moment()
 
 def create_app(config_class=ProdConfig):
+    """Create and configure the Flask application."""
+
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-    GunicornInternalPrometheusMetrics(app)
+    if not app.testing:
+        GunicornInternalPrometheusMetrics(app)
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -38,13 +41,13 @@ def create_app(config_class=ProdConfig):
     moment.init_app(app)
     bootstrap.init_app(app)
 
-    from app.errors import bp as errors_bp
+    from app.errors import bp as errors_bp # pylint: disable=import-outside-toplevel
     app.register_blueprint(errors_bp)
 
-    from app.auth import bp as auth_bp
+    from app.auth import bp as auth_bp # pylint: disable=import-outside-toplevel
     app.register_blueprint(auth_bp)
 
-    from app.main import bp as main_bp
+    from app.main import bp as main_bp # pylint: disable=import-outside-toplevel
     app.register_blueprint(main_bp)
 
     if not app.debug and not app.testing:
@@ -57,4 +60,4 @@ def create_app(config_class=ProdConfig):
 
     return app
 
-from app import models  # noqa
+from app import models  # pylint: disable=cyclic-import,wrong-import-position

@@ -1,1 +1,1 @@
-microblog_image: "linusjonathansandin/microblog:latest"
+microblog_image: "linusjonathansandin/microblog:{{ microblog_tag }}"

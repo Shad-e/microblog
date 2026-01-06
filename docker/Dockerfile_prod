@@ -1,34 +1,28 @@
 #syntax=docker/dockerfile:1.4
 
-FROM python:3.10-alpine
-
-RUN apk add --no-cache
-RUN apk update && apk upgrade --no-cache
+FROM python:3.12-alpine
 RUN adduser -D microblog
 
 WORKDIR /home/microblog
 
+# COPY . .
 COPY app app
 COPY migrations migrations
 COPY requirements requirements
 COPY requirements.txt microblog.py boot.sh ./
 COPY gunicorn_config.py gunicorn_config.py
 
-RUN python -m venv .venv && \
-    .venv/bin/pip3 install --no-cache-dir -r requirements.txt && \
-    chmod +x boot.sh && \
-    chown -R microblog:microblog ./
+RUN apk add --no-cache gcc musl-dev linux-headers
+RUN python -m venv .venv
+RUN .venv/bin/pip3 install -r requirements.txt
 
 ENV FLASK_APP microblog.py
-RUN mkdir -p /tmp/prometheus && chmod 777 /tmp/prometheus
+ENV PROMETHEUS_MULTIPROC_DIR /tmp
+
+RUN chmod +x boot.sh
+RUN chown -R microblog:microblog ./
 
 USER microblog
+
 EXPOSE 5000
-
-ENV PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
-
-
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-CMD curl --fail http://localhost:5000/ || exit 1
-
 ENTRYPOINT ["./boot.sh"]

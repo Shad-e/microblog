@@ -36,14 +36,14 @@ jobs:
         echo -e "${{secrets.SSH_PRIVATE_KEY}}" > /home/runner/.ssh/id_rsa
         chmod 700 /home/runner/.ssh/id_rsa
 
-    - name: Extract tag
-      run: echo "MICROBLOG_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+    - name: Set image tag
+      run: echo "IMAGE_TAG=${{ github.ref_name }}" >> $GITHUB_ENV
 
     - name: Run playbook
       run: |
         cd ansible &&
         ansible-playbook -i hosts deploy_appserver.yml \
-          -e "microblog_tag=${MICROBLOG_TAG}" \
+          -e "microblog_tag=${IMAGE_TAG}" \
           --private-key=/home/runner/.ssh/id_rsa
       env:
         ANSIBLE_HOST_KEY_CHECKING: "False"

@@ -10,3 +10,6 @@ loadbalancer.jofb21.me ansible_host=52.169.5.129
 
 [database]
 database.jofb21.me ansible_host=13.74.151.28
+
+[mymonitoring]
+monitoring.jofb21.me ansible_host=52.138.179.192 

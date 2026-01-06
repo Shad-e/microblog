@@ -1,0 +1,69 @@
+---
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install Prometheus, node exporter, and Alertmanager
+  apt:
+    name:
+      - prometheus
+      - prometheus-node-exporter
+      - prometheus-alertmanager
+    state: present
+
+- name: Add Grafana GPG key
+  apt_key:
+    url: https://apt.grafana.com/gpg.key
+    state: present
+
+- name: Add Grafana apt repository
+  apt_repository:
+    repo: "deb https://apt.grafana.com stable main"
+    state: present
+
+- name: Install Grafana
+  apt:
+    name: grafana
+    state: present
+
+- name: Deploy Grafana configuration
+  template:
+    src: grafana.ini
+    dest: /etc/grafana/grafana.ini
+    owner: root
+    group: grafana
+    mode: '0640'
+  notify: Restart Grafana
+
+- name: Ensure monitoring services are enabled and started
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  loop:
+    - prometheus
+    - prometheus-node-exporter
+    - prometheus-alertmanager
+    - grafana-server
+
+- name: Wait for Grafana to be available
+  uri:
+    url: http://localhost:3000/api/health
+    status_code: 200
+  register: grafana_health
+  retries: 10
+  delay: 5
+  until: grafana_health.status == 200
+
+- name: Add Prometheus as Grafana datasource
+  community.grafana.grafana_datasource:
+    name: Prometheus
+    ds_type: prometheus
+    ds_url: http://localhost:9090
+    access: proxy
+    is_default: true
+    grafana_url: http://localhost:3000
+    grafana_user: admin
+    grafana_password: admin
+

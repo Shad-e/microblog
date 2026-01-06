@@ -1,0 +1,7 @@
+---
+- hosts: mymonitoring
+  remote_user: azureuser
+  become: true
+
+  roles:
+    - monitoring_instance

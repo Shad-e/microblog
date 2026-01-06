@@ -3,12 +3,12 @@ http {
     default_type  application/octet-stream;
 
     upstream app-hosts {
-    {% if (disabled_host | default('')) != 'appserver1' %}
-       server appserver1.{{ domain_name }}:8000;
-    {% endif %}
-    {% if (disabled_host | default('')) != 'appserver2' %}
-       server appserver2.{{ domain_name }}:8000;
-    {% endif %}
+        {% if (disabled_host | default('')) != 'appserver1' %}
+            server {{ hostvars[groups['myappserver'][0]].ansible_host }}:8000;
+        {% endif %}
+        {% if (disabled_host | default('')) != 'appserver2' %}
+            server {{ hostvars[groups['myappserver'][1]].ansible_host }}:8000;
+        {% endif %}
     }
 
 
@@ -35,5 +35,17 @@ http {
         location / {
             proxy_pass http://app-hosts;
         }
+
+        location /grafana/ {
+            proxy_pass http://{{ hostvars[groups['mymonitoring'][0]].ansible_host }}:3000/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-Host $host;
+            proxy_set_header X-Forwarded-Server $host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+        
     }
+
+    
 }

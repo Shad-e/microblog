@@ -8,7 +8,7 @@ instances:
       type: database
     - name: loadbalancer
       type: loadbalancer
-      name: monitoring
+    - name: monitoring
       type: monitoring
 
 relative_names:

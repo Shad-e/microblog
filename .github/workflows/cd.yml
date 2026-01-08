@@ -17,9 +17,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Get version from tag
-        id: get_version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+      - name: Set image tag
+        run: echo "IMAGE_TAG=${{ github.ref_name }}" >> $GITHUB_ENV
       
       - name: Log in to Dockerhub
         uses: docker/login-action@v3
@@ -34,5 +33,5 @@ jobs:
           file: docker/Dockerfile_prod
           push: true
           tags: |
-            linusjonathansandin/microblog:v${{ steps.get_version.outputs.VERSION }}-prod
-            
+            linusjonathansandin/microblog:v${{ env.IMAGE_TAG }}-prod
+

@@ -2,8 +2,6 @@ name: Security Checks
 
 on:
   push:
-    branches:
-      - master
     tags:
       - "v*"
 

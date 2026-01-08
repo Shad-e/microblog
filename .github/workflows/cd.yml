@@ -5,6 +5,9 @@ on:
     workflows: ["Security Checks"]
     types:
       - completed
+  push:
+    tags:
+      - "v*"
 
 jobs:
   test:
@@ -12,13 +15,14 @@ jobs:
 
   build-and-push:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
     needs: test
     
     steps:
       - uses: actions/checkout@v4
       
       - name: Set image tag
-        run: echo "IMAGE_TAG=${{ github.event.workflow_run.head_branch }}" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG=${{ github.ref_name }}" >> $GITHUB_ENV
       
       - name: Log in to Dockerhub
         uses: docker/login-action@v3

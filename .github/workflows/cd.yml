@@ -35,3 +35,4 @@ jobs:
           push: true
           tags: |
             linusjonathansandin/microblog:v${{ steps.get_version.outputs.VERSION }}-prod
+            

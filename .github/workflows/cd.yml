@@ -34,7 +34,3 @@ jobs:
           push: true
           tags: |
             linusjonathansandin/microblog:v${{ env.IMAGE_TAG }}-prod
-
-
-
-

@@ -67,3 +67,13 @@
     grafana_user: admin
     grafana_password: admin
 
+- name: Deploy Prometheus configuration
+  template:
+    src: prometheus.yml.j2
+    dest: /etc/prometheus/prometheus.yml
+    owner: root
+    group: prometheus
+    mode: '0644'
+  notify: Restart Prometheus
+
+

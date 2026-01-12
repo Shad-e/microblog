@@ -4,6 +4,8 @@ Contains routes for main purpose of app
 from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request, current_app
 from flask_login import current_user, login_required
+from werkzeug.exceptions import InternalServerError
+
 from app import db
 from app.main.forms import EditProfileForm, PostForm
 from app.models import User, Post
@@ -105,6 +107,19 @@ def follow(username):
     db.session.commit()
     flash(f'You are following {username}!')
     return redirect(url_for('main.user', username=username))
+
+
+@bp.route('/trigger-500')
+@login_required
+def trigger_500():
+    """
+    Intentionally trigger a 500 error to test monitoring.
+    Visit this route after logging in to generate 5xx responses
+    that should be visible in Prometheus/Grafana and fire alerts.
+    """
+    # Raising an exception will invoke the 500 error handler
+    # and produce a 500 response counted by Prometheus exporter
+    raise InternalServerError("Intentional test error for monitoring")
 
 @bp.route('/unfollow/<username>')
 @login_required

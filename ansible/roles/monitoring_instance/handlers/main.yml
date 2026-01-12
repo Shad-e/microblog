@@ -2,3 +2,13 @@
   service:
     name: grafana-server
     state: restarted
+
+- name: Restart Prometheus
+  service:
+    name: prometheus
+    state: restarted
+
+- name: Restart Alertmanager
+  service:
+    name: prometheus-alertmanager
+    state: restarted

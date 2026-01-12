@@ -20,13 +20,13 @@
 
 - name: Pull Microblog image
   docker_image:
-    name: "{{ microblog_image }}"
+    name: "{{ microblog_image_name }}:{{ microblog_image_tag }}"
     source: pull
 
 - name: Start Microblog container
   docker_container:
     name: microblog
-    image: "{{ microblog_image }}"
+    image: "{{ microblog_image_name }}:{{ microblog_image_tag }}"
     state: started
     recreate: true
     force_kill: true

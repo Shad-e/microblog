@@ -43,7 +43,7 @@ jobs:
       run: |
         cd ansible &&
         ansible-playbook -i hosts deploy_appserver.yml \
-          -e "microblog_tag=${IMAGE_TAG}" \
-          --private-key=/home/runner/.ssh/id_rsa
+        -e "microblog_image_tag=${IMAGE_TAG}" \
+        --private-key=/home/runner/.ssh/id_rsa
       env:
         ANSIBLE_HOST_KEY_CHECKING: "False"

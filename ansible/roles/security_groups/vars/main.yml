@@ -39,6 +39,13 @@ sg_groups:
             priority: 1002
             direction: Inbound
             source_address_prefix: "{{ hostvars[groups['myloadbalancer'][0]].ansible_host }}/32"
+        -   name: HTTP_monitor
+            protocol: Tcp
+            destination_port_range: 8000
+            access: Allow
+            priority: 1003
+            direction: Inbound
+            source_address_prefix: "{{ hostvars[groups['mymonitoring'][0]].ansible_host }}/32"
     -   name: database
         port_rules:
         -   name: SSH

@@ -34,3 +34,11 @@ All notable changes to this project will be documented in this file.
 - Restricted several ports, allowing only access to internal IP-addresses
 
 - Automated using recommended OpenSSH config in 10-first-minutes
+
+## [11.1.14] - 2026-01-12
+
+### Added
+
+- Added Prometheus, Grafana and Alert Manager for monitoring functions
+
+- Updated security groups for access to monitoring server

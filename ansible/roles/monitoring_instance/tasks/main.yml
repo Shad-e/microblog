@@ -76,4 +76,22 @@
     mode: '0644'
   notify: Restart Prometheus
 
+- name: Deploy Prometheus alerting rules
+  template:
+    src: rules.yml.j2
+    dest: /etc/prometheus/rules.yml
+    owner: root
+    group: prometheus
+    mode: '0644'
+  notify: Restart Prometheus
+
+- name: Deploy Alertmanager configuration
+  template:
+    src: alertmanager.yml.j2
+    dest: /etc/alertmanager/alertmanager.yml
+    owner: alertmanager
+    group: alertmanager
+    mode: '0644'
+  notify: Restart Alertmanager
+
 

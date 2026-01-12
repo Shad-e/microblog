@@ -30,4 +30,4 @@ jobs:
           file: docker/Dockerfile_prod
           push: true
           tags: |
-            linusjonathansandin/microblog:${{ env.IMAGE_TAG }}-prod
+            linusjonathansandin/microblog:${{ env.IMAGE_TAG }}

@@ -83,14 +83,29 @@
     owner: root
     group: prometheus
     mode: '0644'
+  register: rules_deployed
   notify: Restart Prometheus
+
+- name: Force Prometheus restart to load rules
+  service:
+    name: prometheus
+    state: restarted
+  when: rules_deployed.changed
+
+- name: Ensure Alertmanager config directory exists
+  file:
+    path: /etc/alertmanager
+    state: directory
+    owner: prometheus
+    group: prometheus
+    mode: '0755'
 
 - name: Deploy Alertmanager configuration
   template:
     src: alertmanager.yml.j2
     dest: /etc/alertmanager/alertmanager.yml
-    owner: alertmanager
-    group: alertmanager
+    owner: prometheus
+    group: prometheus
     mode: '0644'
   notify: Restart Alertmanager
 

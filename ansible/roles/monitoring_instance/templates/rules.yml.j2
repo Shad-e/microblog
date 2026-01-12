@@ -15,4 +15,4 @@ groups:
           service: microblog
         annotations:
           summary: "5xx errors in Microblog"
-          description: "{{ $value | printf \"%0.2f\" }} req/s failing with 5xx over the last minute."
+          description: "{% raw %}{{ $value | printf \"%0.2f\" }}{% endraw %} req/s failing with 5xx over the last minute."

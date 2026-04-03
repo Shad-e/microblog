@@ -1,0 +1,40 @@
+# 06-mysql.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - image: mysql/mysql-server:5.7
+        name: mysql
+        env:
+        - name: MYSQL_DATABASE
+          value: microblog
+        - name: MYSQL_USER
+          value: microblog
+        - name: MYSQL_PASSWORD
+          value: micropassw
+        - name: MYSQL_ROOT_PASSWORD
+          value: rootpassw
+        ports:
+        - containerPort: 3306
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  ports:
+  - port: 3306
+    targetPort: 3306
+  selector:
+    app: mysql
